@@ -101,6 +101,31 @@ public class KSBE {
         } while (choice != 3);
     }
 
+    /* ================= PASSWORD VALIDATION ================= */
+
+    static boolean isValidPassword(String password) {
+
+        if (password.length() < 8) {
+            return false;
+        }
+
+        int letterCount = 0;
+        int numberCount = 0;
+
+        for (int i = 0; i < password.length(); i++) {
+            char ch = password.charAt(i);
+
+            if (Character.isLetter(ch)) {
+                letterCount++;
+            } 
+            else if (Character.isDigit(ch)) {
+                numberCount++;
+            }
+        }
+
+        return letterCount >= 2 && numberCount >= 2;
+    }
+
     /* ================= REGISTER ================= */
 
     static void register() {
@@ -115,8 +140,18 @@ public class KSBE {
         int age = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password;
+
+        do {
+            System.out.print("Password (min 8 chars, at least 2 letters & 2 numbers): ");
+            password = scanner.nextLine();
+
+            if (!isValidPassword(password)) {
+                System.out.println("Invalid password format!");
+                System.out.println("Must be at least 8 characters with 2 letters and 2 numbers.");
+            }
+
+        } while (!isValidPassword(password));
 
         System.out.print("Role (1-user, 2-owner, 3-admin): ");
         int role = scanner.nextInt();
