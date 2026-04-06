@@ -95,7 +95,7 @@ public class KSBE {
             switch (choice) {
                 case 1 -> register();
                 case 2 -> login();
-                case 3 -> System.out.println("Goodbye!");
+                case 3 -> System.out.println("Thanks for using KyusiSphere!");
             }
 
         } while (choice != 3);
@@ -129,37 +129,54 @@ public class KSBE {
     /* ================= REGISTER ================= */
 
     static void register() {
+    System.out.println("\n--- Create New Account ---");
+    System.out.print("Name: ");
+    String name = scanner.nextLine();
 
-        System.out.print("Name: ");
-        String name = scanner.nextLine();
+    System.out.print("Email: ");
+    String email = scanner.nextLine();
 
-        System.out.print("Email: ");
-        String email = scanner.nextLine();
-
-        System.out.print("Age: ");
-        int age = scanner.nextInt();
-        scanner.nextLine();
-
-        String password;
-
-        do {
-            System.out.print("Password (min 8 chars, at least 2 letters & 2 numbers): ");
-            password = scanner.nextLine();
-
-            if (!isValidPassword(password)) {
-                System.out.println("Invalid password format!");
-                System.out.println("Must be at least 8 characters with 2 letters and 2 numbers.");
-            }
-
-        } while (!isValidPassword(password));
-
-        System.out.print("Role (1-user, 2-owner, 3-admin): ");
-        int role = scanner.nextInt();
-        scanner.nextLine();
-
-        users.add(new UserAccount(name, email, age, password, role));
-        System.out.println("Registered successfully!");
+    int age = 0;
+    while (true) {
+        try {
+            System.out.print("Age: ");
+            age = Integer.parseInt(scanner.nextLine()); // Use parse to avoid scanner bugs
+            if (age < 0) throw new Exception("Age cannot be negative!");
+            break; // Exit loop if successful
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Please enter a valid number for age.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
+
+    String password;
+    do {
+        System.out.print("Password (min 8 chars, 2 letters, 2 numbers): ");
+        password = scanner.nextLine();
+        if (!isValidPassword(password)) {
+            System.out.println("Invalid password format!");
+        }
+    } while (!isValidPassword(password));
+
+    int role = 1;
+    while (true) {
+        try {
+            System.out.print("Role (1-user, 2-owner, 3-admin): ");
+            role = Integer.parseInt(scanner.nextLine());
+            if (role < 1 || role > 3) {
+                System.out.println("Invalid role! Choose 1, 2, or 3.");
+                continue;
+            }
+            break;
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Input must be a number (1, 2, or 3).");
+        }
+    }
+
+    users.add(new UserAccount(name, email, age, password, role));
+    System.out.println("Registered successfully!");
+}
 
     /* ================= LOGIN ================= */
 
